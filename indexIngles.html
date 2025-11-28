@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8b7e74, #6b5d54);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .insignia {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .insignia-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .insignia-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(139, 126, 116, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 5px 15px rgba(139, 126, 116, 0.3);
+        }
+
+        .book-card h3 {
+            font-size: 1.8em;
+            color: #8b7e74;
+            margin-bottom: 15px;
+        }
+
+        .book-card p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            position: relative;
+            animation: slideDown 0.3s;
+        }
+
+        .modal-content-large {
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 35px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .modal-title {
+            color: #8b7e74;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .modal-description {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #8b7e74 100%);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 50px;
+            padding: 10px 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 1.1em;
+            padding: 10px;
+            background: transparent;
+        }
+
+        .pdf-list {
+            margin-top: 30px;
+        }
+
+        .pdf-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+        }
+
+        .pdf-item:hover {
+            background: #f5f5dc;
+        }
+        
+        .pdf-name {
+            color: #333;
+            font-size: 1.1em;
+            flex-grow: 1;
+        }
+
+        .pdf-download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #8b7e74 100%);
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-left: 20px;
+            white-space: nowrap;
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <img src="images/insignia.jpg" class="insignia insignia-left">
+    <img src="images/insignia.jpg" class="insignia insignia-right">
+
+    <div class="hero">
+        <h1>Biblioteca Virtual - Inglés</h1>
+        <h2>I.E. 40129 "Manuel Veramendi e Hidalgo"</h2>
+        <br>
+        <p>Descubre y descarga los mejores recursos académicos</p>
+    </div>
+    <div class="container">
+        <div class="books-grid" id="booksGrid"></div>
+    </div>
+
+    <!-- 🌟 Modal -->
+    <div class="modal" id="modalGeneral">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalGeneral')">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+            <a id="modalDownload" href="#" target="_blank" class="download-btn">Descargar PDF</a>
+        </div>
+    </div>
+
+    <script>
+        // 📚 LISTA DE LIBROS (con enlaces Drive)
+        const books = [
+            { title: "Activity Book 1 Beginners Estudiante", pdfUrl: "https://drive.google.com/uc?export=download&id=1VtG8_01A10-8a78RfAxDJxylHXuYKw2j" },
+            { title: "Activity Book 2 Elementary Estudiante", pdfUrl: "https://drive.google.com/uc?export=download&id=1X7fJs_9x4NTdC1c90oYxXqF8OnxKTtlE" },
+            { title: "Activity Book 3 Pre-intermediate Estudiante", pdfUrl: "https://drive.google.com/uc?export=download&id=1r_RHdSRbVD9yCAab9gg01u5lOIQnctPR" },
+            { title: "Activity Book 4 Intermediate Estudiante", pdfUrl: "https://drive.google.com/uc?export=download&id=1mkTv7Ijnv0S6OsEcKUTNs3W6MdWiKxlT" },
+            { title: "Students Book 1 Beginners", pdfUrl: "https://drive.google.com/uc?export=download&id=1KRaQ8xxmDgW-xELlB3HGiezNebZedXvv" },
+            { title: "Students Book 2 Elementary Completo", pdfUrl: "https://drive.google.com/uc?export=download&id=19PPULHjV31fDMY2zjfmNCHrjfRpQVmcD" },
+            { title: "Students Book 3 Pre-intermediate Completo", pdfUrl: "https://drive.google.com/uc?export=download&id=14EvXcJXcgvqUdWZPmFoOQVeTTkRJFC8t" },
+            { title: "Students Book 4 Intermediate Completo", pdfUrl: "https://drive.google.com/uc?export=download&id=106DjFloaWEXvqUqk7aVnU8OtO32hdn2G" }
+        ];
+
+        // Render cards
+        function renderBooks() {
+            const grid = document.getElementById("booksGrid");
+            grid.innerHTML = "";
+
+            books.forEach(book => {
+                const card = document.createElement("div");
+                card.className = "book-card";
+                card.innerHTML = `
+                    <h3>${book.title}</h3>
+                    <p>Click para ver y descargar el archivo PDF</p>
+                `;
+                card.onclick = () => openModal(book.title, book.pdfUrl);
+                grid.appendChild(card);
+            });
+        }
+
+        function openModal(title, pdfUrl) {
+            document.getElementById("modalTitle").textContent = title;
+            document.getElementById("modalDownload").href = pdfUrl;
+            document.getElementById("modalDescription").textContent =
+                "Recurso digital oficial disponible para descarga.";
+            document.getElementById("modalGeneral").style.display = "block";
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("modalGeneral");
+            if (event.target === modal) closeModal("modalGeneral");
+        };
+
+        renderBooks();
+    </script>
+
+</body>
+</html>

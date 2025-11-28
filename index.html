@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <img src="images/insignia.jpg" class="insignia insignia-left">
+    <img src="images/insignia.jpg" class="insignia insignia-right">
+
+    <div class="hero">
+        <h1>Biblioteca Virtual</h1>
+        <h2>I.E. 40129 "Manuel Veramendi e Hidalgo"</h2>
+        <br>
+        <p>Descubre y descarga los mejores recursos académicos</p>
+    </div>
+
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar libros por título, autor o categoría...">
+        </div>
+
+        <div class="books-grid" id="booksGrid"></div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <p class="modal-author" id="modalAuthor"></p>
+            <p class="modal-description" id="modalDescription"></p>
+
+            <a href="#" class="download-btn" id="downloadBtn">Abrir material</a>
+        </div>
+    </div>
+
+    <script>
+        const books = [
+            {
+                id: 1,
+                title: "Comunicación Integral",
+                author: "MINEDU",
+                category: "Comunicación",
+                icon: "images/comunicacion.jpeg",
+                description: "Material de comprensión lectora, literatura y redacción.",
+                pdfUrl: "indexComunicacion.html"
+            },
+            {
+                id: 2,
+                title: "Ciencias Sociales",
+                author: "MINEDU",
+                category: "Cs. Sociales",
+                icon: "images/cienciassociales.jpg",
+                description: "Historia, geografía y formación ciudadana explicadas con claridad.",
+                pdfUrl: "indexSociales.html"
+            },
+            {
+                id: 3,
+                title: "Ciencia y Tecnología",
+                author: "MINEDU",
+                category: "CyT",
+                icon: "images/cienciaytegnologia.jpg",
+                description: "Experimentos, materia, energía, tecnología e investigación escolar.",
+                pdfUrl: "indexCyT.html"
+            },
+            {
+                id: 4,
+                title: "Educación Física",
+                author: "MINEDU",
+                category: "Ed. Física",
+                icon: "images/educacionfisica.jpg",
+                description: "Salud, fuerza, deporte y rutinas para un mejor rendimiento físico.",
+                pdfUrl: "indexEducacionFisica.html"
+            },
+            {
+                id: 5,
+                title: "Educación para el Trabajo",
+                author: "MINEDU",
+                category: "EPT",
+                icon: "images/educacionparaeltrabajo.jpg",
+                description: "Proyectos productivos, emprendimiento, mantenimiento y oficios.",
+                pdfUrl: "indexEPT.html"
+            },
+            {
+                id: 6,
+                title: "Inglés Básico",
+                author: "MINEDU",
+                category: "Inglés",
+                icon: "images/ingles.jpeg",
+                description: "Gramática básica, vocabulario, speaking y listening introductorio.",
+                pdfUrl: "indexIngles.html"
+            },
+            {
+                id: 7,
+                title: "Matemática Aritmética y Álgebra",
+                author: "MINEDU",
+                category: "Matemática",
+                icon: "images/matematica.jpg",
+                description: "Problemas resueltos paso a paso, lógica y razonamiento matemático.",
+                pdfUrl: "indexMatematica.html"
+            }
+        ];
+
+        function renderBooks(booksToRender = books) {
+            const grid = document.getElementById('booksGrid');
+            grid.innerHTML = '';
+            
+            booksToRender.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                card.onclick = () => openModal(book);
+                
+                card.innerHTML = `
+                    <div class="book-cover">
+                        <img src="${book.icon}" alt="${book.title}">
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">${book.title}</h3>
+                        <p class="book-author">${book.author}</p>
+                        <span class="book-category">${book.category}</span>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function openModal(book) {
+            document.getElementById('modalTitle').textContent = book.title;
+            document.getElementById('modalAuthor').textContent = `Por ${book.author}`;
+            document.getElementById('modalDescription').textContent = book.description;
+            document.getElementById('downloadBtn').href = book.pdfUrl;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        document.getElementById('modal').onclick = function(e) {
+            if (e.target === this) closeModal();
+        };
+
+        document.getElementById('searchInput').addEventListener('input', e => {
+            const term = e.target.value.toLowerCase();
+            const filtered = books.filter(book => 
+                book.title.toLowerCase().includes(term) ||
+                book.author.toLowerCase().includes(term) ||
+                book.category.toLowerCase().includes(term)
+            );
+            renderBooks(filtered);
+        });
+
+        renderBooks();
+    </script>
+</body>
+</html>
