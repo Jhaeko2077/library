@@ -260,7 +260,7 @@
 
     <div class="hero">
         <h1>Biblioteca Virtual</h1>
-        <h2>I.E. 40129 "Manuel Veramendi e Hidalgo"</h2>
+        <h2>I.E. 40129 "Manuel Veramendi e Hidalgo" - Comunicación</h2>
         <br>
         <p>Descubre y descarga los mejores recursos académicos</p>
     </div>
@@ -269,7 +269,6 @@
         <div class="books-grid" id="booksGrid"></div>
     </div>
 
-    <!-- Modal para Colección de Libros -->
     <div class="modal" id="modalColeccion">
         <div class="modal-content modal-content-large">
             <span class="close-modal" onclick="closeModalColeccion()">&times;</span>
@@ -284,7 +283,6 @@
     </div>
 
     <script>
-        // 📌 RECUADROS PRINCIPALES (Solo 2)
         const books = [
             {
                 id: 1,
@@ -294,10 +292,52 @@
             }
         ];
 
-        // 📚 AQUÍ AGREGAS LOS LIBROS DE LA COLECCIÓN
-        // 🔴 CAMBIA LAS RUTAS "pdfs/..." CON LAS RUTAS REALES DE TUS PDFs
-        
-        // Renderizar los 2 recuadros principales
+        const pdfLibros = [
+            { id: 1,  name: "A la senda del abismo", pdfUrl: "https://drive.google.com/file/d/18RAcuZulXBNKr2TKXvEps7AN-4emlNnj/view?usp=sharing" },
+            { id: 2,  name: "A mi madre", pdfUrl: "https://drive.google.com/file/d/1NTpVlUJ6RWnqYF8i4Vplh0KtOhlz8FZ9/view?usp=sharing" },
+            { id: 3,  name: "A tu edad", pdfUrl: "https://drive.google.com/file/d/14MhqWx-rpC7JHTIJX076_wR7sarrB_Ba/view?usp=sharing" },
+            { id: 4,  name: "Adiós España, adiós", pdfUrl: "https://drive.google.com/file/d/1I21tYp9CH6oNr8v5Y-eOsLtewW0lah_Y/view?usp=sharing" },
+            { id: 5,  name: "Agatha Cristie – La reina del crimen", pdfUrl: "https://drive.google.com/file/d/1TiFknmux-GDZp7ht9XLFNUspMGoLmo1P/view?usp=sharing" },
+            { id: 6,  name: "Agua", pdfUrl: "https://drive.google.com/file/d/1T-qwHCqng_UyqOjtCajFQky_L7TM8qQH/view?usp=sharing" },
+            { id: 7,  name: "Alma libre", pdfUrl: "https://drive.google.com/file/d/1Ne7eWbafs1wzC9qrRBnCEjrdu5WIUMEq/view?usp=sharing" },
+            { id: 8,  name: "Ana Frank – Diario", pdfUrl: "https://drive.google.com/file/d/1fEpsnMs7RLUer-ev4n_aAicC2-4ltZ3c/view?usp=sharing" },
+            { id: 9,  name: "Anatomía de Agatha Christie", pdfUrl: "https://drive.google.com/file/d/1fJ4yrZsLApg84USX7DqMQVSMLBmI61Q1/view?usp=sharing" },
+            { id: 10, name: "Antología", pdfUrl: "https://drive.google.com/file/d/1VI2owQr8o7Q6vn5Z0j2YUbPwlLvB0o2F/view?usp=sharing" },
+            { id: 11, name: "Aristóteles en 90 minutos – Paul Strathern", pdfUrl: "https://drive.google.com/file/d/1C9SM-UXzZDyYlO0ZRAPaHeTswn8UC_wO/view?usp=sharing" },
+            { id: 12, name: "Cantar del Mío Cid – Anónimo", pdfUrl: "https://drive.google.com/file/d/1k76NW_d0YybzjiYOhU61d5RHI48neFXi/view?usp=sharing" },
+            { id: 13, name: "César Vallejo – Contra el secreto profesional", pdfUrl: "https://drive.google.com/file/d/1-TfpkVHLU9QNgS3Ytsus48c86qDN1_Iz/view?usp=sharing" },
+            { id: 14, name: "César Vallejo – El Tungsteno", pdfUrl: "https://drive.google.com/file/d/1Zc1PwQKQfGuoM4DZTGKAYWxouDExiRE0/view?usp=sharing" },
+            { id: 15, name: "César Vallejo – Paco Yunque", pdfUrl: "https://drive.google.com/file/d/1X0gQMl0LVULJhWo4LIFs-2yO1uBH71df/view?usp=sharing" },
+            { id: 16, name: "Cien años de soledad – Gabriel García Márquez", pdfUrl: "https://drive.google.com/file/d/1WywyiGHPu3k_jVChohkM8OP_Mx1HzHXo/view?usp=sharing" },
+            { id: 17, name: "Coleta la poeta – Selección", pdfUrl: "https://drive.google.com/file/d/1r--Hl77gbdOLUBMDRsmMOWnqIQ9-Zdib/view?usp=sharing" },
+            { id: 18, name: "Conde de Montecristo", pdfUrl: "https://drive.google.com/file/d/1HnDFhHIt4WLR73yWADKcJhJ3DO6ov6Je/view?usp=sharing" },
+            { id: 19, name: "Corazón – Diario de un niño", pdfUrl: "https://drive.google.com/file/d/1hZi4cxvnZknsvq-ugbKIbki_fBPFdMsv/view?usp=sharing" },
+            { id: 20, name: "Cordero Asado – Roald Dahl", pdfUrl: "https://drive.google.com/file/d/1xHehjI29MmzBYtMDkVaSJhGc-mMTrO2J/view?usp=sharing" },
+            { id: 21, name: "Crimen y Castigo – Fiódor Dostoyevski", pdfUrl: "https://drive.google.com/file/d/1541IfXiCRREHBiT681yb2DRD3OiIh2RN/view?usp=sharing" },
+            { id: 22, name: "Cuando éramos honrados mercenarios – Arturo Pérez-Reverte", pdfUrl: "https://drive.google.com/file/d/1QoFdRbpKsrKmIHExO9bDxViUlcuLxG6h/view?usp=sharing" },
+            { id: 23, name: "Cuánta tierra necesita un hombre – León Tolstói", pdfUrl: "https://drive.google.com/file/d/1d7ApxgXTFtEuXkWbBKYla0yzDcCdxKT0/view?usp=sharing" },
+            { id: 24, name: "Cuento de cuentos", pdfUrl: "https://drive.google.com/file/d/1A40Wyi8RQ43ba_XescGE252oEm0pnpdf/view?usp=sharing" },
+            { id: 25, name: "Cuento de Navidad", pdfUrl: "https://drive.google.com/file/d/10JPDmdkCiVOiy3lGclSr65fBTS9hvVma/view?usp=sharing" },
+            { id: 26, name: "Cuentos antiguos", pdfUrl: "https://drive.google.com/file/d/1MZQtyDlLhO8o6i_uXwtwk7y1ZSAAKdpb/view?usp=sharing" },
+            { id: 27, name: "Cuentos de amor", pdfUrl: "https://drive.google.com/file/d/1pBwgQoMtlasjBTv8_GeTQw87dVvnBmU9/view?usp=sharing" },
+            { id: 28, name: "Cuentos de la tierra", pdfUrl: "https://drive.google.com/file/d/1C5eeg-mi40KtC4TIdnPSYrUT5VIFuwdm/view?usp=sharing" },
+            { id: 29, name: "Cuentos de Marineda", pdfUrl: "https://drive.google.com/file/d/1gkfEzMy0Qubf-TiRzNWnR_9_DH-QPqPM/view?usp=sharing" },
+            { id: 30, name: "Cuentos de siempre I", pdfUrl: "https://drive.google.com/file/d/1rfNb7hdW1kpnuUYhb80kR1JXCZmeB4dk/view?usp=sharing" },
+            { id: 31, name: "Cuentos de siempre II", pdfUrl: "https://drive.google.com/file/d/1D6N7IIYtc6tvucNwa_G9hdr9l2MzYLkP/view?usp=sharing" },
+            { id: 32, name: "Cuentos dramáticos", pdfUrl: "https://drive.google.com/file/d/1WV6LoG_24-yGP-3oZ4RpBOHlLI7w89wO/view?usp=sharing" },
+            { id: 33, name: "Cuentos europeos", pdfUrl: "https://drive.google.com/file/d/1qtaTt8oeq_cjoVAIFkHen5GfncKL3op-/view?usp=sharing" },
+            { id: 34, name: "Derrida en 90 minutos – Paul Strathern", pdfUrl: "https://drive.google.com/file/d/12RK4J7ZMS1U_nYGHnEPx4TWIo1CDnY7i/view?usp=sharing" },
+            { id: 35, name: "Desde mi cielo – Alice Sebold", pdfUrl: "https://drive.google.com/file/d/11HI9BefsmmV-jfyXCR7-68q2zKwYXlpT/view?usp=sharing" },
+            { id: 36, name: "Divina comedia", pdfUrl: "https://drive.google.com/file/d/1c_6yEVFeur5UXtSXEhQKMmB_NaV7LBh0/view?usp=sharing" },
+            { id: 37, name: "Don Quijote de la Mancha – Miguel de Cervantes", pdfUrl: "https://drive.google.com/file/d/1bdprNmwPqd8cqNLtkKBbyz6gT746jIcJ/view?usp=sharing" },
+            { id: 38, name: "Doña Perfecta", pdfUrl: "https://drive.google.com/file/d/1cuqMMwXJTcdRa1WW0y13X76SsLu-7u0p/view?usp=sharing" },
+            { id: 39, name: "Edipo Rey – Sófocles", pdfUrl: "https://drive.google.com/file/d/1LdueEa-ivbYvioau4_9LtEQPUrXMZuQu/view?usp=sharing" },
+            { id: 40, name: "El aguatero estudiante", pdfUrl: "https://drive.google.com/file/d/1LDb82nWiaVzA0ovUdhLmlx1hccK5AScc/view?usp=sharing" },
+            { id: 41, name: "El amor en los tiempos del cólera – Gabriel García Márquez", pdfUrl: "https://drive.google.com/file/d/1s2CrYe8PwoZUK5oBQlO06kgEu6P3Vqgd/view?usp=sharing" },
+            { id: 42, name: "El gran Gatsby – Francis Scott Fitzgerald", pdfUrl: "https://drive.google.com/file/d/1AD-wiSpIpFDbjrYJefYlXxQOkAdb_Gf7/view?usp=sharing" },
+            { id: 43, name: "El libro de la selva", pdfUrl: "https://drive.google.com/file/d/1tfOqAHkq67VX8w19Jjeh-dsgOYacjh6t/view?usp=sharing" }
+        ];
+
         function renderBooks() {
             const grid = document.getElementById('booksGrid');
             grid.innerHTML = '';
@@ -316,7 +356,6 @@
             });
         }
 
-        // Renderizar lista de PDFs
         function renderPdfList(librosToRender = pdfLibros) {
             const list = document.getElementById('pdfList');
             list.innerHTML = '';
@@ -334,7 +373,6 @@
             });
         }
 
-        // Abrir modal según tipo
         function openModal(type) {
             if (type === 'manual') {
                 document.getElementById('modalManual').style.display = 'block';
@@ -344,7 +382,6 @@
             }
         }
 
-        // Cerrar modales
         function closeModalManual() {
             document.getElementById('modalManual').style.display = 'none';
         }
@@ -353,7 +390,6 @@
             document.getElementById('modalColeccion').style.display = 'none';
         }
 
-        // Cerrar al hacer clic fuera
         window.onclick = function(event) {
             const modalManual = document.getElementById('modalManual');
             const modalColeccion = document.getElementById('modalColeccion');
@@ -365,12 +401,10 @@
             }
         }
 
-        // Descargar PDF
         function downloadPdf(url) {
             window.open(url, '_blank');
         }
 
-        // Buscador de libros
         document.getElementById('searchPdf').addEventListener('input', e => {
             const term = e.target.value.toLowerCase();
             const filtered = pdfLibros.filter(libro => 
@@ -379,7 +413,6 @@
             renderPdfList(filtered);
         });
 
-        // Inicializar
         renderBooks();
     </script>
 </body>

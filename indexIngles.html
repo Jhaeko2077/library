@@ -259,8 +259,8 @@
     <img src="images/insignia.jpg" class="insignia insignia-right">
 
     <div class="hero">
-        <h1>Biblioteca Virtual - Inglés</h1>
-        <h2>I.E. 40129 "Manuel Veramendi e Hidalgo"</h2>
+        <h1>Biblioteca Virtual</h1>
+        <h2>I.E. 40129 "Manuel Veramendi e Hidalgo" - Ingles</h2>
         <br>
         <p>Descubre y descarga los mejores recursos académicos</p>
     </div>
@@ -268,7 +268,6 @@
         <div class="books-grid" id="booksGrid"></div>
     </div>
 
-    <!-- 🌟 Modal -->
     <div class="modal" id="modalGeneral">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('modalGeneral')">&times;</span>
@@ -279,7 +278,6 @@
     </div>
 
     <script>
-        // 📚 LISTA DE LIBROS (con enlaces Drive)
         const books = [
             { title: "Activity Book 1 Beginners Estudiante", pdfUrl: "https://drive.google.com/uc?export=download&id=1VtG8_01A10-8a78RfAxDJxylHXuYKw2j" },
             { title: "Activity Book 2 Elementary Estudiante", pdfUrl: "https://drive.google.com/uc?export=download&id=1X7fJs_9x4NTdC1c90oYxXqF8OnxKTtlE" },
@@ -291,7 +289,6 @@
             { title: "Students Book 4 Intermediate Completo", pdfUrl: "https://drive.google.com/uc?export=download&id=106DjFloaWEXvqUqk7aVnU8OtO32hdn2G" }
         ];
 
-        // Render cards
         function renderBooks() {
             const grid = document.getElementById("booksGrid");
             grid.innerHTML = "";

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8b7e74, #6b5d54);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .insignia {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .insignia-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .insignia-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(139, 126, 116, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 5px 15px rgba(139, 126, 116, 0.3);
+        }
+
+        .book-card h3 {
+            font-size: 1.8em;
+            color: #8b7e74;
+            margin-bottom: 15px;
+        }
+
+        .book-card p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            position: relative;
+            animation: slideDown 0.3s;
+        }
+
+        .modal-content-large {
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 35px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .modal-title {
+            color: #8b7e74;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .modal-description {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #8b7e74 100%);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 50px;
+            padding: 10px 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 1.1em;
+            padding: 10px;
+            background: transparent;
+        }
+
+        .pdf-list {
+            margin-top: 30px;
+        }
+
+        .pdf-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+        }
+
+        .pdf-item:hover {
+            background: #f5f5dc;
+        }
+        
+        .pdf-name {
+            color: #333;
+            font-size: 1.1em;
+            flex-grow: 1;
+        }
+
+        .pdf-download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #8b7e74 100%);
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-left: 20px;
+            white-space: nowrap;
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <img src="images/insignia.jpg" class="insignia insignia-left">
+    <img src="images/insignia.jpg" class="insignia insignia-right">
+
+    <div class="hero">
+        <h1>Biblioteca Virtual</h1>
+        <h2>I.E. 40129 "Manuel Veramendi e Hidalgo" - Matemática</h2>
+        <br>
+        <p>Descubre y descarga los mejores recursos académicos</p>
+    </div>
+
+    <div class="container">
+        <div class="books-grid" id="booksGrid"></div>
+    </div>
+
+    <!-- ========== 7 MODALS PDF SIMPLE ========== -->
+    <div class="modal" id="modalManual">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalManual')">&times;</span>
+            <h2 class="modal-title">Libro de Consulta de Álgebra</h2>
+            <p class="modal-description">Descarga el Libro de Consulta de Álgebra.</p>
+            <a href="https://drive.google.com/file/d/1Jx52MJ2gSk4XJKC6uBQuoNtpldKxztgG/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalReglamento">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalReglamento')">&times;</span>
+            <h2 class="modal-title">Libro de Consulta de Aritmética</h2>
+            <p class="modal-description">Descarga el Libro de Consulta de Aritmética.</p>
+            <a href="https://drive.google.com/file/d/1El8Ct4bYUQfgvFsiD0JER-4_ojqHf23x/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalCalendario">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalCalendario')">&times;</span>
+            <h2 class="modal-title">Libro de Consulta de Trigonometria</h2>
+            <p class="modal-description">Descarga el Libro de Consulta de Trigonometria.</p>
+            <a href="https://drive.google.com/file/d/1W4tmsO7FSXJr9S3fB8TOB_LWwxL88pN0/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalPlanTutor">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalPlanTutor')">&times;</span>
+            <h2 class="modal-title">Libro Trigonometria I</h2>
+            <p class="modal-description">Descarga el Libro de Trigonometria I.</p>
+            <a href="URL AQUI" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalNormas">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalNormas')">&times;</span>
+            <h2 class="modal-title">Libro de Consulta de Geometria</h2>
+            <p class="modal-description">Descarga el Libro de Consulta de Geometria.</p>
+            <a href="https://drive.google.com/file/d/1k3h1XuEyUGO96aje7iNi-mq4rRvtQ8Qz/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalAgenda">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalAgenda')">&times;</span>
+            <h2 class="modal-title">Libro de Actividades</h2>
+            <p class="modal-description">Descarga el Libro de Actividades.</p>
+            <a href="https://drive.google.com/file/d/1_KVcO2uh92dV9YuSTJGq2H4z3DtBbC7z/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalHorarios">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalHorarios')">&times;</span>
+            <h2 class="modal-title">Libro de Razonamiento Matemático</h2>
+            <p class="modal-description">Descarga el Libro de Razonamiento Matemático.</p>
+            <a href="https://drive.google.com/file/d/13isrJW-FKRAcOWVPZS8yUZUf3t1KcAfb/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <!-- ========== 5 MODALS CON LISTAS ========== -->
+    <div class="modal" id="modalLista1">
+        <div class="modal-content modal-content-large">
+            <span class="close-modal" onclick="closeModal('modalLista1')">&times;</span>
+            <h2 class="modal-title">1ro de Secundaria</h2>
+
+            <input type="text" id="searchLista1" class="search-bar" placeholder="Buscar...">
+            <div class="pdf-list" id="pdfLista1"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalLista2">
+        <div class="modal-content modal-content-large">
+            <span class="close-modal" onclick="closeModal('modalLista2')">&times;</span>
+            <h2 class="modal-title">2do de Secundaria</h2>
+
+            <input type="text" id="searchLista2" class="search-bar" placeholder="Buscar...">
+            <div class="pdf-list" id="pdfLista2"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalLista3">
+        <div class="modal-content modal-content-large">
+            <span class="close-modal" onclick="closeModal('modalLista3')">&times;</span>
+            <h2 class="modal-title">3ro de Secundaria</h2>
+
+            <input type="text" id="searchLista3" class="search-bar" placeholder="Buscar...">
+            <div class="pdf-list" id="pdfLista3"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalLista4">
+        <div class="modal-content modal-content-large">
+            <span class="close-modal" onclick="closeModal('modalLista4')">&times;</span>
+            <h2 class="modal-title">4to de Secundaria</h2>
+
+            <input type="text" id="searchLista4" class="search-bar" placeholder="Buscar...">
+            <div class="pdf-list" id="pdfLista4"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalLista5">
+        <div class="modal-content modal-content-large">
+            <span class="close-modal" onclick="closeModal('modalLista5')">&times;</span>
+            <h2 class="modal-title">5to de Secundaria</h2>
+
+            <input type="text" id="searchLista5" class="search-bar" placeholder="Buscar...">
+            <div class="pdf-list" id="pdfLista5"></div>
+        </div>
+    </div>
+
+    <script>
+        const books = [
+            { id: 1, title: "Libro de Consulta de Álgebra", type: "manual" },
+            { id: 2, title: "Libro de Consulta de Aritmética", type: "reglamento" },
+            { id: 3, title: "Libro de Consulta de Trigonometria", type: "calendario" },
+            { id: 4, title: "Libro Trigonometria I", type: "plan" },
+            { id: 5, title: "Libro de Consulta de Geometria", type: "normas" },
+            { id: 6, title: "Libro de Actividades", type: "agenda" },
+            { id: 7, title: "Libro de Actividades", type: "horarios" },
+            { id: 8, title: "1ro de Secundaria", type: "lista1" },
+            { id: 9, title: "2do de Secundaria", type: "lista2" },
+            { id: 10, title: "3ro de Secundaria", type: "lista3" },
+            { id: 11, title: "4to de Secundaria", type: "lista4" },
+            { id: 12, title: "5to de Secundaria", type: "lista5" }
+        ];
+
+        const modalMap = {
+            manual: "modalManual",
+            reglamento: "modalReglamento",
+            calendario: "modalCalendario",
+            plan: "modalPlanTutor",
+            normas: "modalNormas",
+            agenda: "modalAgenda",
+            horarios: "modalHorarios",
+            lista1: "modalLista1",
+            lista2: "modalLista2",
+            lista3: "modalLista3",
+            lista4: "modalLista4",
+            lista5: "modalLista5"
+        };
+
+        // ========== LISTAS DE LIBROS EDITABLES 🎯 ==========
+        const pdfLista1 = [
+            { name: "Álgebra", pdfUrl: "https://drive.google.com/file/d/1A5-hVVFfNYWQlCX-P9UrvnugmJ6Q_teT/view?usp=sharing" },
+            { name: "Aritmetica", pdfUrl: "https://drive.google.com/file/d/1zGcO01yzEqH1b2Gg_ogIvhbgNg-nDPYz/view?usp=sharing" },
+            { name: "Geometria", pdfUrl: "https://drive.google.com/file/d/1bvf-oLiHcgWCXSTBmX4mwyKs6mW8n5KQ/view?usp=sharing" },
+            { name: "Matemática 1ro", pdfUrl: "https://drive.google.com/file/d/18RWwx335TXxgjPZxPBWBWpq_QWoy0wtD/view?usp=sharing" },
+            { name: "Razonamiento Matemático", pdfUrl: "https://drive.google.com/file/d/1IH38wp0HjYCtSvqR2WyR4FI6RKxM9w-k/view?usp=sharing" },
+            { name: "Trigonometria", pdfUrl: "https://drive.google.com/file/d/1ecDSi9h7MhGjc6TUhZ3Mm343KrkKv-Tq/view?usp=sharing" }
+        ];
+
+        const pdfLista2 = [
+            { name: "Álgebra", pdfUrl: "https://drive.google.com/file/d/1p9o11LDf7rUi__O_u0UQzc_9m9gz5mF3/view?usp=sharing" },
+            { name: "Aritmetica", pdfUrl: "https://drive.google.com/file/d/1W3uVZGT6hMCCyXz4C2B3lvx2xMSRKom-/view?usp=sharing" },
+            { name: "Geometria", pdfUrl: "https://drive.google.com/file/d/1vGLQCgPBmUBWsEDsncE2ut8PZi9i36PQ/view?usp=sharing" },
+            { name: "Matemática 2do", pdfUrl: "https://drive.google.com/file/d/1hBW7-hl89SV5HzBNjsGqo88nnJjclwaQ/view?usp=sharing" },
+            { name: "Razonamiento Matemático", pdfUrl: "https://drive.google.com/file/d/1tYIgdUDLdOUq66XDCgwoKyZV3sdlcYZA/view?usp=sharing" },
+            { name: "Trigonometria", pdfUrl: "https://drive.google.com/file/d/1m_WpOKotzBwmqlikPfZcWQcY-iSQkYHc/view?usp=sharing" }
+        ];
+
+        const pdfLista3 = [
+            { name: "Álgebra I", pdfUrl: "https://drive.google.com/file/d/1sVUDG07Lx0qE4zdzDfkNKPK-1vs8nzgQ/view?usp=sharing" },
+            { name: "Álgebra II", pdfUrl: "https://drive.google.com/file/d/1wP-72YKNMuVpGhM-crLNkPUMKBHm4aZU/view?usp=sharing" },
+            { name: "Aritmetica", pdfUrl: "https://drive.google.com/file/d/1pcGDaG8NIGoB-PZTrI34HMbmBURFgcbz/view?usp=sharing" },
+            { name: "Geometria", pdfUrl: "https://drive.google.com/file/d/1NIaRZf2Y81hw2d4tq4DwpGVKrGZlsViU/view?usp=sharing" },
+            { name: "Matemática 3ro", pdfUrl: "https://drive.google.com/file/d/1KdU1JS3ebFo5jp4inkBMp7mc7TCT7TH7/view?usp=sharing" },
+            { name: "Razonamiento Matemático", pdfUrl: "https://drive.google.com/file/d/1Qzzn35yXbT0SGbK5xEr3xQdm5ZHQAVa0/view?usp=sharing" },
+            { name: "Trigonometria", pdfUrl: "https://drive.google.com/file/d/1qE2nfRP6DD8hnK0bAQ9pGjr0IVrMQHNt/view?usp=sharing" }
+        ];
+
+        const pdfLista4 = [
+            { name: "Álgebra", pdfUrl: "https://drive.google.com/file/d/1WTIqkDEsKrsyPmcKzj4_BGP5M3AisVLz/view?usp=sharing" },
+            { name: "Aritmetica", pdfUrl: "https://drive.google.com/file/d/127ojwWY5WLExnV057-0SgTY7jaySfZvz/view?usp=sharing" },
+            { name: "Geometria I", pdfUrl: "https://drive.google.com/file/d/1dnH7bt4z1OBAvAWpJCx4RJ8lgXaBarQE/view?usp=sharing" },
+            { name: "Geometria II", pdfUrl: "https://drive.google.com/file/d/1RHDaXrkGx_nVdwyDt17dIOzXI8F0JJZL/view?usp=sharing" },
+            { name: "Razonamiento Matemático I", pdfUrl: "https://drive.google.com/file/d/1tkDZ1cGBzx6Ob0vd4MrenhtQx8cklQ4A/view?usp=sharing" },
+            { name: "Razonamiento Matemático II", pdfUrl: "https://drive.google.com/file/d/1eLk-VlnR9_dtmuDpWrt8FOvE4FVBoVBT/view?usp=sharing" },
+            { name: "Trigonometria", pdfUrl: "https://drive.google.com/file/d/1eNbFn275szqwq5sB7l3McQbEEmpBfUI2/view?usp=sharing" }
+        ];
+
+        const pdfLista5 = [
+            { name: "Álgebra", pdfUrl: "https://drive.google.com/file/d/1m7foL8GF8S1TtBe5fjh4-OCb70GTzff7/view?usp=sharing" },
+            { name: "Álgebra CONAMAT", pdfUrl: "https://drive.google.com/file/d/11UUjKC30bjh7JvloMKDADzDv7EYbxPJO/view?usp=sharing" },
+            { name: "Aritmetica", pdfUrl: "https://drive.google.com/file/d/1B3GKnkJ-61m7-nxaUr5ew0DsCxthtXJp/view?usp=sharing" },
+            { name: "Aritmetica CONAMAT", pdfUrl: "https://drive.google.com/file/d/1eVGr2TTTX8QFsVabfg-rhoJC1izfrQel/view?usp=sharing" },
+            { name: "Geometria I", pdfUrl: "https://drive.google.com/file/d/1C0E5g3BWtD5lS0ZmTVCzxoSPsJM1q5r7/view?usp=sharing" },
+            { name: "Geometria II", pdfUrl: "https://drive.google.com/file/d/1WIO84aqVBN0JzNmenlgH-HdePngX0M-f/view?usp=sharing" },
+            { name: "Geometria Analitica CONAMAT", pdfUrl: "https://drive.google.com/file/d/1UycIY1NDfjXaUv5wBnKFrgKuRfWKBzVN/view?usp=sharing" },
+            { name: "Geometria y Trigonometria CONAMAT", pdfUrl: "https://drive.google.com/file/d/1TMLpDH2RaoPoA6ZqE4m0atgpf9QDX-1r/view?usp=sharing" },  
+            { name: "Razonamiento Matemático I", pdfUrl: "https://drive.google.com/file/d/1V6c9sRT1g2aDodEW2anp62nO2WbGuIf-/view?usp=sharing" },
+            { name: "Trigonometria", pdfUrl: "https://drive.google.com/file/d/1tH741X3vbrJqugBNBlGcHsNrBGv06XmC/view?usp=sharing" }
+        ];
+
+        function renderBooks() {
+            const grid = document.getElementById("booksGrid");
+            grid.innerHTML = "";
+            books.forEach(book => {
+                const card = document.createElement("div");
+                card.className = "book-card";
+                card.onclick = () => openModal(book.type);
+                card.innerHTML = `<h3>${book.title}</h3>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderPdfList(lista, id) {
+            const list = document.getElementById(id);
+            list.innerHTML = "";
+            lista.forEach(libro => {
+                list.innerHTML += `
+                <div class='pdf-item'>
+                    <span>${libro.name}</span>
+                    <button class='pdf-download-btn' onclick="window.open('${libro.pdfUrl}')">Descargar</button>
+                </div>`;
+            });
+        }
+
+        function openModal(type) {
+            const modalId = modalMap[type];
+            document.getElementById(modalId).style.display = "block";
+
+            if (type === "lista1") renderPdfList(pdfLista1, "pdfLista1");
+            if (type === "lista2") renderPdfList(pdfLista2, "pdfLista2");
+            if (type === "lista3") renderPdfList(pdfLista3, "pdfLista3");
+            if (type === "lista4") renderPdfList(pdfLista4, "pdfLista4");
+            if (type === "lista5") renderPdfList(pdfLista5, "pdfLista5");
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderBooks();
+        });
+    </script>
+</body>
