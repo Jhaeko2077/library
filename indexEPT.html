@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8b7e74, #6b5d54);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .insignia {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .insignia-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .insignia-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(139, 126, 116, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 5px 15px rgba(139, 126, 116, 0.3);
+        }
+
+        .book-card h3 {
+            font-size: 1.8em;
+            color: #8b7e74;
+            margin-bottom: 15px;
+        }
+
+        .book-card p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            position: relative;
+            animation: slideDown 0.3s;
+        }
+
+        .modal-content-large {
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 35px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .modal-title {
+            color: #8b7e74;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .modal-description {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #8b7e74 100%);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 50px;
+            padding: 10px 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 1.1em;
+            padding: 10px;
+            background: transparent;
+        }
+
+        .pdf-list {
+            margin-top: 30px;
+        }
+
+        .pdf-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+        }
+
+        .pdf-item:hover {
+            background: #f5f5dc;
+        }
+        
+        .pdf-name {
+            color: #333;
+            font-size: 1.1em;
+            flex-grow: 1;
+        }
+
+        .pdf-download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #8b7e74 100%);
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-left: 20px;
+            white-space: nowrap;
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <img src="images/insignia.jpg" class="insignia insignia-left">
+    <img src="images/insignia.jpg" class="insignia insignia-right">
+
+    <div class="hero">
+        <h1>Biblioteca Virtual</h1>
+        <h2>I.E. 40129 "Manuel Veramendi e Hidalgo" - EPT</h2>
+        <br>
+        <p>Descubre y descarga los mejores recursos académicos</p>
+    </div>
+
+    <div class="container">
+        <div class="books-grid" id="booksGrid"></div>
+    </div>
+
+    <!-- ========== 7 MODALS PDF SIMPLE ========== -->
+    <div class="modal" id="modalManual">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalManual')">&times;</span>
+            <h2 class="modal-title">Libro de Fundamentos de Robotica</h2>
+            <p class="modal-description">Descarga el Libro de Antonio Barrientos y otros.</p>
+            <a href="https://drive.google.com/file/d/1WTsK0y1CqP0hsffUIeiiF7lC_73sKKbZ/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalReglamento">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalReglamento')">&times;</span>
+            <h2 class="modal-title">Libro de Modelo Conceptual Para Gestión de Proyectos</h2>
+            <p class="modal-description">Descarga el Libro de Modelo Conceptual.</p>
+            <a href="https://drive.google.com/file/d/1Zm_uHIAAAxDmXyBlKHvohp6iQISdVRIa/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalCalendario">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalCalendario')">&times;</span>
+            <h2 class="modal-title">Diseño Web: Dreamweaver</h2>
+            <p class="modal-description">Descarga el Libro Guia de Dreamweaver.</p>
+            <a href="https://drive.google.com/file/d/1UO0YkTGk6_dG3-SxyrFYe6XjRtjSkKgo/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="modal" id="modalPlanTutor">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('modalPlanTutor')">&times;</span>
+            <h2 class="modal-title">Diseño Web: Illustrator</h2>
+            <p class="modal-description">Descarga el Libro de Guia de Illustrator.</p>
+            <a href="https://drive.google.com/file/d/13w-m_ngFNIVZNPAYFpny0Hi88xynxN3h/view?usp=sharing" class="download-btn" target="_blank">Descargar PDF</a>
+        </div>
+    </div>
+    <!-- ========== 5 MODALS CON LISTAS ========== -->
+    <div class="modal" id="modalLista1">
+        <div class="modal-content modal-content-large">
+            <span class="close-modal" onclick="closeModal('modalLista1')">&times;</span>
+            <h2 class="modal-title">Libros de Emprendimiento</h2>
+            <input type="text" id="searchLista1" class="search-bar" placeholder="Buscar...">
+            <div class="pdf-list" id="pdfLista1"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalLista2">
+        <div class="modal-content modal-content-large">
+            <span class="close-modal" onclick="closeModal('modalLista2')">&times;</span>
+            <h2 class="modal-title">Guias</h2>
+
+            <input type="text" id="searchLista2" class="search-bar" placeholder="Buscar...">
+            <div class="pdf-list" id="pdfLista2"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalLista3">
+        <div class="modal-content modal-content-large">
+            <span class="close-modal" onclick="closeModal('modalLista3')">&times;</span>
+            <h2 class="modal-title">Manuales</h2>
+
+            <input type="text" id="searchLista3" class="search-bar" placeholder="Buscar...">
+            <div class="pdf-list" id="pdfLista3"></div>
+        </div>
+    </div>
+
+    <script>
+        const books = [
+            { id: 1, title: "Libro de Fundamentos de Robotica", type: "manual" },
+            { id: 2, title: "Libro de Modelo Conceptual Para Gestión de Proyectos", type: "reglamento" },
+            { id: 3, title: "Diseño Web: Dreamweaver", type: "calendario" },
+            { id: 4, title: "Diseño Web: Illustrator", type: "plan" },
+            { id: 5, title: "Libros de Emprendimiento", type: "lista1" },
+            { id: 6, title: "Guias", type: "lista2" },
+            { id: 7, title: "Manuales", type: "lista3" },
+        ];
+
+        const modalMap = {
+            manual: "modalManual",
+            reglamento: "modalReglamento",
+            calendario: "modalCalendario",
+            plan: "modalPlanTutor",
+            lista1: "modalLista1",
+            lista2: "modalLista2",
+            lista3: "modalLista3",
+        };
+
+        // ========== LISTAS DE LIBROS EDITABLES 🎯 ==========
+        const pdfLista1 = [
+            { name: "1ro Libro de Emprendimiento", pdfUrl: "https://drive.google.com/file/d/134RMMlZz7ZsDad1rnIUvDl2DVgffOWEq/view?usp=sharing" },
+            { name: "2do Libro de Emprendimiento", pdfUrl: "https://drive.google.com/file/d/1gZqcE7hanpH_MWB3pwnaYK9h0RG3GOVp/view?usp=sharing" },
+            { name: "3ro Libro de Emprendimiento", pdfUrl: "https://drive.google.com/file/d/1Ful3GIXUnMcf5shGBBvqCG7WsEiiTtSZ/view?usp=sharing" },
+            { name: "4to Libro de Emprendimiento", pdfUrl: "" },
+            { name: "5to Libro de Emprendimiento", pdfUrl: "https://drive.google.com/file/d/1P0937_vOBKebtdo_n7mUgCSBf6dhjxtu/view?usp=sharing" },
+        ];
+
+        const pdfLista2 = [
+            { name: "Guía del Proceso Creativo de Desing Thinking", pdfUrl: "https://drive.google.com/file/d/1-rp7LLqS-T9xVtWy3d69FksKGkc5Q4Ex/view?usp=sharing" },
+            { name: "Guía Practica para Emprendedores", pdfUrl: "https://drive.google.com/file/d/1N1XkB7fwnK_YeUnmy5kO2a87iBU9SWTS/view?usp=sharing" },
+            { name: "Guía de Arduino", pdfUrl: "https://drive.google.com/file/d/1XNzGV4RzZfZVmvZ7Vb0Dd5lMqWeS6CUr/view?usp=sharing" },
+            { name: "Guía de Desing Thinking", pdfUrl: "https://drive.google.com/file/d/1oJ-y1NOFGgDW4S3SI-tTwjw5KmvuyP1u/view?usp=sharing" },
+        ];
+
+        const pdfLista3 = [
+            { name: "Manual de Scratch", pdfUrl: "https://drive.google.com/file/d/1PU1fzU1FYNyc-4un01mN79lMIkMm9wit/view?usp=sharing" },
+            { name: "Manual Lego", pdfUrl: "https://drive.google.com/file/d/1bAdoAIWWnbKbM3u6PC8XmkJkvcfDIF-S/view?usp=sharing" },
+        ];
+
+        function renderBooks() {
+            const grid = document.getElementById("booksGrid");
+            grid.innerHTML = "";
+            books.forEach(book => {
+                const card = document.createElement("div");
+                card.className = "book-card";
+                card.onclick = () => openModal(book.type);
+                card.innerHTML = `<h3>${book.title}</h3>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderPdfList(lista, id) {
+            const list = document.getElementById(id);
+            list.innerHTML = "";
+            lista.forEach(libro => {
+                list.innerHTML += `
+                <div class='pdf-item'>
+                    <span>${libro.name}</span>
+                    <button class='pdf-download-btn' onclick="window.open('${libro.pdfUrl}')">Descargar</button>
+                </div>`;
+            });
+        }
+
+        function openModal(type) {
+            const modalId = modalMap[type];
+            document.getElementById(modalId).style.display = "block";
+
+            if (type === "lista1") renderPdfList(pdfLista1, "pdfLista1");
+            if (type === "lista2") renderPdfList(pdfLista2, "pdfLista2");
+            if (type === "lista3") renderPdfList(pdfLista3, "pdfLista3");
+            if (type === "lista4") renderPdfList(pdfLista4, "pdfLista4");
+            if (type === "lista5") renderPdfList(pdfLista5, "pdfLista5");
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderBooks();
+        });
+    </script>
+</body>
